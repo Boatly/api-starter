@@ -1,0 +1,51 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build",
+      "command": "dotnet",
+      "type": "process",
+      "args": ["build", "${workspaceFolder}/SimpleApi.csproj"],
+      "problemMatcher": "$msCompile",
+      "detail": "Builds the project"
+    },
+    {
+      "label": "Create EF Migration",
+      "type": "shell",
+      "command": "dotnet ef migrations add ${input:migrationName}",
+      "problemMatcher": "$msCompile",
+      "detail": "Creates a new Entity Framework migration"
+    },
+    {
+      "label": "Update Database",
+      "type": "shell",
+      "command": "dotnet ef database update",
+      "problemMatcher": [],
+      "detail": "Updates the database with the latest migration"
+    },
+    {
+      "label": "Rollback Last Migration",
+      "type": "shell",
+      "command": "dotnet ef database update",
+      "args": ["${input:previousMigration}"],
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      },
+      "detail": "Rolls back the database to the specified previous migration"
+    }
+  ],
+  "inputs": [
+    {
+      "id": "migrationName",
+      "type": "promptString",
+      "description": "Enter the migration name"
+    },
+    {
+      "id": "previousMigration",
+      "type": "promptString",
+      "description": "Enter the name of the migration to roll back to"
+    }
+  ]
+}
